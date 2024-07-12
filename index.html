@@ -1,0 +1,154 @@
+ <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Home</title>
+      <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+    <a href="/user"><button type="button" class="btn me">Me</button></a>
+    <br><br>
+    <span id="greeting"></span><span>${user.username}</span>
+    <br>
+    <h1 id="welcome"><span id="wel">Welcome to </span>King's Shopping Mall!</h1>
+    <h3 style="text-align:center">Making you look good is our priority...</h3>
+    <br>
+    <hr style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+    <br>
+    <div class="nav" id="nav1">
+        <a href="/cart">Cart</a>
+        <a href="/about">About</a>
+        <a href="/settings">Settings</a>
+        <a href="/promotions/add">Promotions</a>
+        <a href="/account">Account</a>
+        <a href="/products/add">Add product</a>
+    </div>
+    <br>
+    <input type="text" id="search" placeholder="search a product" name="text" class="search">
+    <img src="search.png" onclick="search()" class="search-icon">
+    <br><br>
+    <select id="category">
+        <option value="all">All Categories</option>
+        <option value="wears">Wears</option>
+        <option value="jewelries">Jewelries</option>
+        <option value="accessories">Accessories</option>
+        <option value="skincare products">Skin Care</option>
+        <option value="food">Food</option>
+    </select>
+    <br>
+    <p>Our products:</p>
+    <div id="products">
+        <!-- Dynamically generate product links -->
+    </div>
+    <br>
+    <br>
+    <div class="nav">
+   <a href="/user-post/${user.id}">POST</a>
+        <a href="/users">CHAT</a>
+        <a href="/posts" onclick="showPost()">NEWS FEED</a>
+    </div>
+<br>
+    <div id="content"></div>
+    <br>
+    <div class="fp">
+        <h2>Our Featured Products</h2>
+        <!-- Dynamically generate product links -->
+        ${product.map(product => `<a href="/productz/${product.id}">${product.name} - $${product.price}</a>`).join('')}
+    </div>
+    <div class="nav hidden" id="nav2">
+        <a href="/cart">Cart</a>
+        <a href="/about">About</a>
+        <a href="/settings">Settings</a>
+        <a href="/promotions/add">Promotions</a>
+        <a href="/account">Account</a>
+        <a href="/products/add">Add product</a>
+    </div>
+    <p class="foot" id="foot"></p>
+
+    <script>
+      function search() {
+          var searchText = document.getElementById("search").value.toLowerCase();
+          var category = document.getElementById("category").value.toLowerCase();
+          var products = ${JSON.stringify(products)};
+          var filteredProducts = products.filter(product => {
+            return (category === 'all' || product[0] === category) && product.slice(1).some(item => item.toLowerCase().includes(searchText));
+          });
+
+var html = filteredProducts.map(product => {
+  return '<div><img src="' + product[1] + '" id="pic' + product[2] + '" class="assembly" style="width: 100px; height: 100px;"><br><span>' + product[2] + '</span><br><span>   <a href="/cart/add"><img src="add-to-cart.png" id="add" style="width: 20px; height: 20px;"></a></span></div>';
+}).join('');
+
+
+
+document.getElementById("products").style .display = "flex";
+
+document.getElementById("products").style .gap = "10px";
+
+document.getElementById("products").style .textAlign = "center";
+
+
+document.getElementById("products").innerHTML = html;
+}
+
+ const year = new Date().getFullYear();
+  document.getElementById("foot").innerHTML = "King Shopping Mall from 2000 - " + year + " All Rights Reserved.";
+
+
+        // Function to hide the welcome message after 5 seconds
+        function hideWelcomeMessage() {
+            var welcomeElement = document.getElementById('wel');
+            if (welcomeElement) {
+                welcomeElement.style.display = 'none';
+            }
+        }
+
+        // Set a timeout to call the function after 5000 milliseconds (5 seconds)
+        setTimeout(hideWelcomeMessage, 8000);
+
+
+function greetUser() {
+    const date = new Date();
+    const hours = date.getHours();
+    const greetingDiv = document.getElementById('greeting');
+    const body = document.body;
+
+    if (hours >= 6 && hours < 12) { // Morning (6am to 11:59am)
+        greetingDiv.textContent = "Good morning!";
+        body.style.backgroundColor = "white";
+        body.style.color = "black";
+    } else if (hours >= 12 && hours < 18) { // Afternoon (12pm to 5:59pm)
+        greetingDiv.textContent = "Good day!";
+        body.style.backgroundColor = "white";
+        body.style.color = "black";
+    } else { // Evening and night (6pm to 5:59am)
+        greetingDiv.textContent = "Good evening!";
+        body.style.backgroundColor = "black";
+        body.style.color = "white";
+    }
+}
+
+// Call the function when the page loads to display the appropriate greeting
+greetUser();
+    
+      function toggleNav(navId) {
+            const nav1 = document.getElementById('nav1');
+            const nav2 = document.getElementById('nav2');
+            
+            if (navId === 'nav1') {
+                nav1.classList.remove('hidden');
+                nav2.classList.add('hidden');
+            } else if (navId === 'nav2') {
+                nav1.classList.add('hidden');
+                nav2.classList.remove('hidden');
+            }
+        }
+
+        // Example usage: 
+        // Call toggleNav with the id of the nav you want to display.
+        // toggleNav('nav1');
+        // toggleNav('nav2');
+
+      </script>
+    </body>
+    </html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Account</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <% if (isAuthenticated) { %>
+
+   <h1><%= user.username %>'s Page</h1>
+    <h2>Welcome, <%= user.username %>!</h2>
+  <% } else { %>
+    <p>You are not logged in.</p>
+  <% } %>
+  
+  <!-- Authentication buttons -->
+  <% if (isAuthenticated) { %>
+    <form action="/logout" method="POST">
+      <button type="submit" id="logout" class="btn">Log Out</button>
+    </form>
+  <% } else { %>
+    <form action="/login" method="POST">
+      <input type="text" name="username" placeholder="Username"><br><br>
+      <input type="password" name="password" placeholder="Password"><br><br>
+      <button type="submit" class="btn">Log In</button>
+    </form>
+  <% } %>
+  <a href="/signup"><h4>Sign up</h4></a>
+  <br>
+  <a href="/home">Back to Home</a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoutButton = document.getElementById('logout');
+      if (logoutButton) {
+        logoutButton.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          fetch('/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+          })
+          .then(response => {
+            if (response.ok) {
+              localStorage.clear(); // Clear client-side data
+              window.location.href = '/account'; // Redirect to login or home page
+            } else {
+              console.error('Logout failed');
+            }
+          })
+          .catch(error => console.error('Error:', error));
+        });
+      }
+    });
+
+    function adjustColorsBasedOnTime() {
+      const date = new Date();
+      const hours = date.getHours();
+      const body = document.body;
+
+      if (hours >= 6 && hours < 18) { // Daytime (6am to 5:59pm)
+        body.style.backgroundColor = "white";
+        body.style.color = "black";
+      } else { // Nighttime (6pm to 5:59am)
+        body.style.backgroundColor = "black";
+        body.style.color = "white";
+      }
+    }
+
+    // Call the function when the page loads to adjust colors based on the time of day
+    adjustColorsBasedOnTime();
+
+  
+  </script>
+</body>
+</html>
